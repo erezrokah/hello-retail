@@ -80,8 +80,7 @@
   },
   "homepage": "https://github.com/Nordstrom/hello-retail#readme",
   "pre-commit": [
-    //"test",
-    //"lint"
+    
   ],
   "dependencies": {},
   "devDependencies": {
