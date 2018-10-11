@@ -1,4 +1,4 @@
-# Hello, Retail!  [![Build Status](https://travis-ci.org/Nordstrom/hello-retail.svg?branch=master)](https://travis-ci.org/Nordstrom/hello-retail)
+# Hello, Retail!  [![Build Status](https://travis-ci.com/erezrokah/hello-retail.svg?branch=master)](https://travis-ci.com/erezrokah/hello-retail)
 
 Hello, Retail! is a Nordstrom Technology open-source project. Hello, Retail! is a 100% serverless, event-driven framework and functional proof-of-concept showcasing a central unified log approach as applied to the retail problem space. All code and patterns are intended to be re-usable for scalable applications large and small.
 
