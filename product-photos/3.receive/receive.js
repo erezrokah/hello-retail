@@ -146,7 +146,7 @@ const impl = {
   ensureAuthTokenDecrypted: (event) => {
     if (!twilio.authToken) {
       twilio.authToken = constants.TWILIO_AUTH_TOKEN
-      return BbPromise.resolve(event)      
+      return BbPromise.resolve(event)
     } else {
       return BbPromise.resolve(event)
     }

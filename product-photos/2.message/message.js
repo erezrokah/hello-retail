@@ -8,7 +8,6 @@ const Twilio = require('twilio')
  * AWS
  */
 aws.config.setPromisesDependency(BbPromise)
-const kms = new aws.KMS()
 
 /**
  * Twilio
@@ -53,7 +52,7 @@ const util = {
   serverError: (method, err) => {
     console.log(`${constants.MODULE} ${method} - ${constants.ERROR_SERVER}: ${err}`)
     return util.response(500, constants.ERROR_SERVER)
-  }, 
+  },
 }
 
 /**
@@ -65,7 +64,7 @@ const impl = {
    * @param event The event containing the photographer assignment
    */
   ensureAuthTokenDecrypted: (event) => {
-    if (!twilio.sdk) {      
+    if (!twilio.sdk) {
       twilio.accountSid = constants.TWILIO_ACCOUNT_SID
       twilio.authToken = constants.TWILIO_AUTH_TOKEN
       twilio.sdk = Twilio(twilio.accountSid, twilio.authToken)

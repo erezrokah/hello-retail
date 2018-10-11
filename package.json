@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "./node_modules/.bin/mocha --recursive -R min ./**/*.spec.js",
-    "lint": "./node_modules/.bin/eslint ./**/*.js ./**/*.jsx",
+    "lint": "./node_modules/.bin/eslint .",
     "root:install": "./build/0.env.sh && ./build/1.install.sh \"Installing Top-Level Project Dependencies\"           .",
     "root:install:all": "npm run root:install && npm run writer:install && npm run catalog:install:all && npm run photos:install:all && npm run web:install",
     "root:deploy:all": "npm run stream:deploy && npm run writer:deploy && npm run catalog:deploy:all && npm run photos:deploy:all && npm run web:deploy:all",
@@ -80,7 +80,8 @@
   },
   "homepage": "https://github.com/Nordstrom/hello-retail#readme",
   "pre-commit": [
-    
+    "test",
+    "lint"
   ],
   "dependencies": {},
   "devDependencies": {

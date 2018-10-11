@@ -90,7 +90,7 @@ const api = {
         KeyConditionExpression: '#u = :u',
         ExpressionAttributeNames: {
           '#u': 'userId',
-          '#p': 'productId'
+          '#p': 'productId',
           '#c': 'createdAt',
           '#q': 'quantity',
           '#up': 'updatedAt',

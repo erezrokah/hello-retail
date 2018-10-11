@@ -9,7 +9,6 @@ const Twilio = require('twilio')
  */
 aws.config.setPromisesDependency(BbPromise)
 const dynamo = new aws.DynamoDB.DocumentClient()
-const kms = new aws.KMS()
 
 /**
  * Twilio
@@ -49,16 +48,6 @@ class ServerError extends Error {
 }
 
 /**
- * Utility Methods (Internal)
- */
-const util = {
-  decrypt: (field, value) => kms.decrypt({ CiphertextBlob: new Buffer(value, 'base64') }).promise().then(
-    data => BbPromise.resolve(data.Plaintext.toString('ascii')),
-    error => BbPromise.reject({ field, error }) // eslint-disable-line comma-dangle
-  ),
-}
-
-/**
  * Implementation (Internal)
  */
 const impl = {
@@ -67,7 +56,7 @@ const impl = {
    * @param event The event containing the photographer assignment
    */
   ensureAuthTokenDecrypted: (event) => {
-    if (!twilio.sdk) {      
+    if (!twilio.sdk) {
       twilio.accountSid = constants.TWILIO_ACCOUNT_SID
       twilio.authToken = constants.TWILIO_AUTH_TOKEN
       twilio.sdk = Twilio(twilio.accountSid, twilio.authToken)
