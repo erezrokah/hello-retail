@@ -5,4 +5,4 @@
 # ```
 # Top Level Project
 name: hello-retail
-deploymentBucket: com.${self:custom.private.company}.${self:custom.private.team}.serverless.${self:provider.region}
+# deploymentBucket: com.${self:custom.private.company}.${self:custom.private.team}.serverless.${self:provider.region}

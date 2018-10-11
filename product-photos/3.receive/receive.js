@@ -67,7 +67,7 @@ const constants = {
   ENDPOINT: process.env.ENDPOINT,
   IMAGE_BUCKET: process.env.IMAGE_BUCKET,
   TABLE_PHOTO_ASSIGNMENTS_NAME: process.env.TABLE_PHOTO_ASSIGNMENTS_NAME,
-  TWILIO_AUTH_TOKEN_ENCRYPTED: process.env.TWILIO_AUTH_TOKEN_ENCRYPTED,
+  TWILIO_AUTH_TOKEN: process.env.TWILIO_AUTH_TOKEN,
 }
 
 /**
@@ -145,11 +145,8 @@ const impl = {
    */
   ensureAuthTokenDecrypted: (event) => {
     if (!twilio.authToken) {
-      return util.decrypt('authToken', constants.TWILIO_AUTH_TOKEN_ENCRYPTED)
-        .then((authToken) => {
-          twilio.authToken = authToken
-          return BbPromise.resolve(event)
-        })
+      twilio.authToken = constants.TWILIO_AUTH_TOKEN
+      return BbPromise.resolve(event)      
     } else {
       return BbPromise.resolve(event)
     }

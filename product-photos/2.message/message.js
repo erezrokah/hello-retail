@@ -31,8 +31,8 @@ const constants = {
   METHOD_ENSURE_TWILIO_INITIALIZED: 'ensureAuthTokenDecrypted',
   METHOD_SEND_MESSAGE: 'sendMessage',
   // external
-  TWILIO_ACCOUNT_SID_ENCRYPTED: process.env.TWILIO_ACCOUNT_SID_ENCRYPTED,
-  TWILIO_AUTH_TOKEN_ENCRYPTED: process.env.TWILIO_AUTH_TOKEN_ENCRYPTED,
+  TWILIO_ACCOUNT_SID: process.env.TWILIO_ACCOUNT_SID,
+  TWILIO_AUTH_TOKEN: process.env.TWILIO_AUTH_TOKEN,
   TWILIO_NUMBER: process.env.TWILIO_NUMBER,
 }
 
@@ -53,10 +53,7 @@ const util = {
   serverError: (method, err) => {
     console.log(`${constants.MODULE} ${method} - ${constants.ERROR_SERVER}: ${err}`)
     return util.response(500, constants.ERROR_SERVER)
-  },
-  decrypt: (field, value) => kms.decrypt({ CiphertextBlob: new Buffer(value, 'base64') }).promise()
-    .then(data => BbPromise.resolve(data.Plaintext.toString('ascii')))
-    .error(error => BbPromise.reject(field, error)),
+  }, 
 }
 
 /**
@@ -68,19 +65,12 @@ const impl = {
    * @param event The event containing the photographer assignment
    */
   ensureAuthTokenDecrypted: (event) => {
-    if (!twilio.sdk) {
-      return BbPromise.all([
-        util.decrypt('accountSid', constants.TWILIO_ACCOUNT_SID_ENCRYPTED),
-        util.decrypt('authToken', constants.TWILIO_AUTH_TOKEN_ENCRYPTED),
-      ]).then((values) => {
-        twilio.accountSid = values[0]
-        twilio.authToken = values[1]
-        twilio.sdk = Twilio(twilio.accountSid, twilio.authToken)
-        twilio.messagesCreate = BbPromise.promisify(twilio.sdk.messages.create)
-        return BbPromise.resolve(event)
-      }).catch((field, error) =>
-        BbPromise.reject(new ServerError(`${constants.METHOD_ENSURE_TWILIO_INITIALIZED} - Error decrypting '${field}': ${error}`)) // eslint-disable-line comma-dangle
-      )
+    if (!twilio.sdk) {      
+      twilio.accountSid = constants.TWILIO_ACCOUNT_SID
+      twilio.authToken = constants.TWILIO_AUTH_TOKEN
+      twilio.sdk = Twilio(twilio.accountSid, twilio.authToken)
+      twilio.messagesCreate = BbPromise.promisify(twilio.sdk.messages.create)
+      return BbPromise.resolve(event)
     } else {
       return BbPromise.resolve(event)
     }

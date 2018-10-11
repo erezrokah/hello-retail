@@ -32,6 +32,9 @@ resources:
         KeySchema:
           - AttributeName: id
             KeyType: HASH
+        TimeToLiveSpecification:
+          AttributeName: timeToLive
+          Enabled: true
         ProvisionedThroughput:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
