@@ -14,7 +14,6 @@ custom:
 
 provider:
   name: aws
-  deploymentBucket: ${self:custom.helloRetail.deploymentBucket}
   runtime: nodejs4.3
   profile: ${self:custom.private.profile}
   region: ${self:custom.private.region}
@@ -80,4 +79,4 @@ resources:
                    Action:
                      - 'dynamodb:Query'
                    Resource:
-                    Fn::ImportValue: ${self:custom.cartBuilder.custom.exportProductCatalogTableCategoryIndexArn} #TODO what do i do with this
+                    Fn::ImportValue: ${self:custom.cartBuilder.custom.exportCartTableArn} #TODO what do i do with this

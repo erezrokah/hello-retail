@@ -71,7 +71,7 @@ custom:
         - '/'
 
   # SSL Certificate to use for Cloud Front.
-  sslCert: ${self:custom.private.websiteSSLCert}
+  # sslCert: ${self:custom.private.websiteSSLCert}
 
   # Stage name for deployment. Use 'prod' to deploy to production.
   stage: ${opt:stage, self:provider.stage, self:custom.private.stage}
@@ -103,7 +103,6 @@ custom:
 
 provider:
   name: aws
-  deploymentBucket: com.${self:custom.private.company}.${self:custom.private.team}.serverless.${self:provider.region}
   profile: ${self:custom.private.profile}
   region: ${self:custom.private.region}
 
@@ -237,31 +236,31 @@ resources:
               Cookies:
                 Forward: none
             ViewerProtocolPolicy: redirect-to-https
-          ViewerCertificate:
-            SslSupportMethod: sni-only
-            AcmCertificateArn: ${self:custom.sslCert}
+          #ViewerCertificate:
+          #  SslSupportMethod: sni-only
+          #  AcmCertificateArn: ${self:custom.sslCert}
       DependsOn:
         - HelloRetailWebBucket
 
     # ================= Route 53 ===================
 
-    HelloRetailWebRecordSetGroup:
-      Type: AWS::Route53::RecordSetGroup
-      Properties:
-        HostedZoneName: ${self:custom.domainName}.
-        RecordSets:
-        - Name: ${self:custom.dnsHostName}
-          Type: A
-          AliasTarget:
-            DNSName: ${self:custom.cloudFrontDomainName}
-            HostedZoneId: ${self:custom.cloudFrontHostedZoneId}
-        - Name: ${self:custom.dnsHostName}
-          Type: AAAA
-          AliasTarget:
-            DNSName: ${self:custom.cloudFrontDomainName}
-            HostedZoneId: ${self:custom.cloudFrontHostedZoneId}
-      DependsOn:
-        - HelloRetailWebDistribution
+    # HelloRetailWebRecordSetGroup:
+    #   Type: AWS::Route53::RecordSetGroup
+    #   Properties:
+    #     HostedZoneName: ${self:custom.domainName}.
+    #     RecordSets:
+    #     - Name: ${self:custom.dnsHostName}
+    #       Type: A
+    #       AliasTarget:
+    #         DNSName: ${self:custom.cloudFrontDomainName}
+    #         HostedZoneId: ${self:custom.cloudFrontHostedZoneId}
+    #     - Name: ${self:custom.dnsHostName}
+    #       Type: AAAA
+    #       AliasTarget:
+    #         DNSName: ${self:custom.cloudFrontDomainName}
+    #         HostedZoneId: ${self:custom.cloudFrontHostedZoneId}
+    #   DependsOn:
+    #     - HelloRetailWebDistribution
 
   # ================= Outputs ===================
 
