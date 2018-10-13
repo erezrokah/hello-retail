@@ -40,7 +40,7 @@ const impl = {
     const updateCallback = (err) => {
       if (priorErr === undefined) { // first update result
         if (err) {
-          console.log("err = ", err)
+          console.log('err = ', err)
           priorErr = err
         } else {
           priorErr = false
@@ -56,8 +56,8 @@ const impl = {
     const dbParamsCart = {
       TableName: constants.TABLE_CART_NAME,
       Key: {
-          userId: event.origin.slice(event.origin.lastIndexOf(".")+1, event.origin.lastIndexOf("/")), // example userId spliced from origin (see example event above): FFB43IREIOXFBHWJERAQCI9M5JCJ
-          productId: event.data.id,
+        userId: event.origin.slice(event.origin.lastIndexOf('.') + 1, event.origin.lastIndexOf('/')), // example userId spliced from origin (see example event above): FFB43IREIOXFBHWJERAQCI9M5JCJ
+        productId: event.data.id,
       },
       UpdateExpression: [
         'SET',
@@ -76,7 +76,7 @@ const impl = {
       ExpressionAttributeValues: {
         ':c': Date.now(),
         ':u': Date.now().toString(),
-        ':fn': event.origin.slice(event.origin.lastIndexOf("/")+1), // example friendlyName spliced from origin (see example event above): Jane Smith
+        ':fn': event.origin.slice(event.origin.lastIndexOf('/') + 1), // example friendlyName spliced from origin (see example event above): Jane Smith
         ':q': 1,
       },
       ReturnValues: 'NONE',
@@ -105,7 +105,7 @@ const impl = {
     const updateCallback = (err) => {
       if (priorErr === undefined) { // first update result
         if (err) {
-          console.log("err = ", err)
+          console.log('err = ', err)
           priorErr = err
         } else {
           priorErr = false
@@ -121,8 +121,8 @@ const impl = {
     const dbParamsCart = {
       TableName: constants.TABLE_CART_NAME,
       Key: {
-          userId: event.origin.slice(event.origin.lastIndexOf(".")+1, event.origin.lastIndexOf("/")), // example userId: FFB43IREIOXFBHWJERAQCI9M5JCJ
-          productId: event.data.id, // example productId: 4579874
+        userId: event.origin.slice(event.origin.lastIndexOf('.') + 1, event.origin.lastIndexOf('/')), // example userId: FFB43IREIOXFBHWJERAQCI9M5JCJ
+        productId: event.data.id, // example productId: 4579874
       },
     }
     console.log(dbParamsCart)

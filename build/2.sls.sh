@@ -9,9 +9,9 @@ echo ${1} ${2} in ${3}
 
 OWD=$(pwd)
 
-cd ${3}
 RES=$?
 if [ ${RES} -eq 0 ]; then
+  cd ${3}
   ${OWD}/node_modules/.bin/sls ${1} -s ${STAGE} -v
   RES=$?
   cd ${OWD}

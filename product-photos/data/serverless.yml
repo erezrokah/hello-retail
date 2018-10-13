@@ -10,7 +10,6 @@ custom:
 
 provider:
   name: aws
-  deploymentBucket: ${self:custom.helloRetail.deploymentBucket}
   runtime: nodejs8.10
   profile: ${self:custom.private.profile}
   region: ${self:custom.private.region}
@@ -32,6 +31,9 @@ resources:
         KeySchema:
           - AttributeName: id
             KeyType: HASH
+        TimeToLiveSpecification:
+          AttributeName: timeToLive
+          Enabled: true
         ProvisionedThroughput:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1

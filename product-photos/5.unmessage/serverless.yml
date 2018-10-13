@@ -10,7 +10,6 @@ custom:
 
 provider:
   name: aws
-  deploymentBucket: ${self:custom.helloRetail.deploymentBucket}
   runtime: nodejs8.10
   profile: ${self:custom.private.profile}
   region: ${self:custom.private.region}
@@ -23,8 +22,8 @@ functions:
     environment:
       TABLE_PHOTO_REGISTRATIONS_NAME:
         Fn::ImportValue: ${self:custom.productPhotos.exportPhotoRegistrationsTableName}
-      TWILIO_ACCOUNT_SID_ENCRYPTED: ${self:custom.private.twilio.accountSid}
-      TWILIO_AUTH_TOKEN_ENCRYPTED: ${self:custom.private.twilio.authToken}
+      TWILIO_ACCOUNT_SID: ${self:custom.private.twilio.accountSid}
+      TWILIO_AUTH_TOKEN: ${self:custom.private.twilio.authToken}
       TWILIO_NUMBER: ${self:custom.private.twilio.${self:custom.stage}.number}
 
 resources:
