@@ -1,15 +1,15 @@
-import React, { Component, PropTypes } from 'react'
+import React, { Component, PropTypes } from 'react';
 
 class ValidationErrors extends Component {
   static propTypes = {
     errors: PropTypes.arrayOf(PropTypes.string).isRequired,
-  }
+  };
 
   constructor(props) {
-    super(props)
+    super(props);
     this.state = {
       errors: props.errors,
-    }
+    };
   }
 
   render() {
@@ -19,8 +19,8 @@ class ValidationErrors extends Component {
           <div className="errorMessage">Error: {error}</div>
         ))}
       </div>
-    )
+    );
   }
 }
 
-export default ValidationErrors
+export default ValidationErrors;

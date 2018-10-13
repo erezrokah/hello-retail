@@ -1,6 +1,6 @@
-import React, { Component, PropTypes } from 'react'
-import { Link } from 'react-router'
-import config from '../../config'
+import React, { Component, PropTypes } from 'react';
+import { Link } from 'react-router';
+import config from '../../config';
 
 class ProductCard extends Component {
   static propTypes = {
@@ -8,27 +8,27 @@ class ProductCard extends Component {
     description: PropTypes.string,
     id: PropTypes.string,
     name: PropTypes.string,
-  }
+  };
 
   static defaultProps = {
     brand: '',
     description: '',
     id: 0,
     name: '',
-  }
+  };
 
   constructor(props) {
-    super(props)
+    super(props);
 
-    console.log(props)
+    console.log(props);
 
-    this.domainName = 'hello-retail.biz'
+    this.domainName = 'hello-retail.biz';
 
     if (config.Stage !== 'prod') {
-      this.domainName = `${config.Stage}.${this.domainName}`
+      this.domainName = `${config.Stage}.${this.domainName}`;
     }
 
-    this.state = {}
+    this.state = {};
   }
 
   // image ratio: 3:4
@@ -47,8 +47,8 @@ class ProductCard extends Component {
         <div className="productDesc">{this.props.description}</div>
         <br />
       </div>
-    )
+    );
   }
 }
 
-export default ProductCard
+export default ProductCard;

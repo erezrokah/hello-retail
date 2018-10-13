@@ -1,5 +1,5 @@
-import { Component, PropTypes } from 'react'
-import config from '../../config'
+import { Component, PropTypes } from 'react';
+import config from '../../config';
 
 class CartDataSource extends Component {
   static propTypes = {
@@ -12,29 +12,34 @@ class CartDataSource extends Component {
     }),
     cartItemsLoaded: PropTypes.func.isRequired,
     userId: PropTypes.string,
-  }
+  };
 
   static defaultProps = {
     awsLogin: null,
     userId: null,
-  }
+  };
 
   constructor(props) {
-    super(props)
-    this.getCartProductsByUserIdAsync = this.getCartProductsByUserIdAsync.bind(this)
-    this.getCartProductsByUserIdFromDynamoAsync = this.getCartProductsByUserIdFromDynamoAsync.bind(this)
-    this.componentDidMount = this.componentDidMount.bind(this)
+    super(props);
+    this.getCartProductsByUserIdAsync = this.getCartProductsByUserIdAsync.bind(
+      this,
+    );
+    this.getCartProductsByUserIdFromDynamoAsync = this.getCartProductsByUserIdFromDynamoAsync.bind(
+      this,
+    );
+    this.componentDidMount = this.componentDidMount.bind(this);
   }
 
   componentDidMount() {
-    this.dynamo = new this.props.awsLogin.aws.DynamoDB()
-    this.docClient = new this.props.awsLogin.aws.DynamoDB.DocumentClient()
+    this.dynamo = new this.props.awsLogin.aws.DynamoDB();
+    this.docClient = new this.props.awsLogin.aws.DynamoDB.DocumentClient();
 
     if (this.props.userId) {
-      return (this.getCartProductsByUserIdAsync(this.props.userId)
-        .then(this.props.cartItemsLoaded))
+      return this.getCartProductsByUserIdAsync(this.props.userId).then(
+        this.props.cartItemsLoaded,
+      );
     } else {
-      return Promise.reject(new Error('userId required'))
+      return Promise.reject(new Error('userId required'));
     }
   }
 
@@ -48,16 +53,15 @@ class CartDataSource extends Component {
       ExpressionAttributeValues: {
         ':ui': userId,
       },
-    }
-    return this.docClient.query(params).promise()
+    };
+    return this.docClient.query(params).promise();
   }
 
   getCartProductsByUserIdAsync(userId) {
-    return this.getCartProductsByUserIdFromDynamoAsync(userId)
-    .then((data) => {
-      const cartProductList = []
+    return this.getCartProductsByUserIdFromDynamoAsync(userId).then(data => {
+      const cartProductList = [];
 
-      data.Items.forEach((item) => {
+      data.Items.forEach(item => {
         cartProductList.push({
           productId: item.productId,
           createdAt: item.createdAt,
@@ -65,15 +69,15 @@ class CartDataSource extends Component {
           updatedAt: item.updatedAt,
           friendlyName: item.friendlyName,
           userId: item.userId,
-        })
-      })
-      return cartProductList
-    })
+        });
+      });
+      return cartProductList;
+    });
   }
 
   render() {
-    return null
+    return null;
   }
 }
 
-export default CartDataSource
+export default CartDataSource;

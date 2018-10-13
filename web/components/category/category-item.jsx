@@ -1,5 +1,5 @@
-import React, { Component, PropTypes } from 'react'
-import { Link } from 'react-router'
+import React, { Component, PropTypes } from 'react';
+import { Link } from 'react-router';
 
 class CategoryItem extends Component {
   static propTypes = {
@@ -7,8 +7,8 @@ class CategoryItem extends Component {
   };
 
   constructor(props) {
-    super(props)
-    this.state = {}
+    super(props);
+    this.state = {};
   }
 
   render() {
@@ -21,8 +21,8 @@ class CategoryItem extends Component {
           {this.props.categoryName}
         </Link>
       </div>
-    )
+    );
   }
 }
 
-export default CategoryItem
+export default CategoryItem;

@@ -1,11 +1,11 @@
-'use strict'
+'use strict';
 
-const aws = require('aws-sdk') // eslint-disable-line import/no-unresolved, import/no-extraneous-dependencies
-const KH = require('kinesis-handler')
+const aws = require('aws-sdk'); // eslint-disable-line import/no-unresolved, import/no-extraneous-dependencies
+const KH = require('kinesis-handler');
 
-const eventSchema = require('./retail-stream-schema-ingress.json')
-const cartAddSchema = require('./cart-add-schema.json')
-const cartRemoveSchema = require('./cart-remove-schema.json')
+const eventSchema = require('./retail-stream-schema-ingress.json');
+const cartAddSchema = require('./cart-add-schema.json');
+const cartRemoveSchema = require('./cart-remove-schema.json');
 
 const constants = {
   // self
@@ -15,11 +15,11 @@ const constants = {
   METHOD_CART_REMOVE: 'cartRemove',
   // resources
   TABLE_CART_NAME: process.env.TABLE_CART_NAME,
-}
+};
 
-const kh = new KH.KinesisHandler(eventSchema, constants.MODULE)
+const kh = new KH.KinesisHandler(eventSchema, constants.MODULE);
 
-const dynamo = new aws.DynamoDB.DocumentClient()
+const dynamo = new aws.DynamoDB.DocumentClient();
 
 const impl = {
   /**
@@ -36,27 +36,41 @@ const impl = {
    * @param complete The callback to inform of completion, with optional error parameter.
    */
   cartAdd: (event, complete) => {
-    let priorErr
-    const updateCallback = (err) => {
-      if (priorErr === undefined) { // first update result
+    let priorErr;
+    const updateCallback = err => {
+      if (priorErr === undefined) {
+        // first update result
         if (err) {
-          console.log('err = ', err)
-          priorErr = err
+          console.log('err = ', err);
+          priorErr = err;
         } else {
-          priorErr = false
+          priorErr = false;
         }
-      } else if (priorErr && err) { // second update result, if an error was previously received and we have a new one
-        complete(`${constants.METHOD_CART_ADD} - errors updating DynamoDb: ${[priorErr, err]}`)
+      } else if (priorErr && err) {
+        // second update result, if an error was previously received and we have a new one
+        complete(
+          `${constants.METHOD_CART_ADD} - errors updating DynamoDb: ${[
+            priorErr,
+            err,
+          ]}`,
+        );
       } else if (priorErr || err) {
-        complete(`${constants.METHOD_CART_ADD} - error updating DynamoDb: ${priorErr || err}`)
-      } else { // second update result if error was not previously seen
-        complete()
+        complete(
+          `${constants.METHOD_CART_ADD} - error updating DynamoDb: ${priorErr ||
+            err}`,
+        );
+      } else {
+        // second update result if error was not previously seen
+        complete();
       }
-    }
+    };
     const dbParamsCart = {
       TableName: constants.TABLE_CART_NAME,
       Key: {
-        userId: event.origin.slice(event.origin.lastIndexOf('.') + 1, event.origin.lastIndexOf('/')), // example userId spliced from origin (see example event above): FFB43IREIOXFBHWJERAQCI9M5JCJ
+        userId: event.origin.slice(
+          event.origin.lastIndexOf('.') + 1,
+          event.origin.lastIndexOf('/'),
+        ), // example userId spliced from origin (see example event above): FFB43IREIOXFBHWJERAQCI9M5JCJ
         productId: event.data.id,
       },
       UpdateExpression: [
@@ -82,9 +96,9 @@ const impl = {
       ReturnValues: 'NONE',
       ReturnConsumedCapacity: 'NONE',
       ReturnItemCollectionMetrics: 'NONE',
-    }
-    console.log(dbParamsCart)
-    dynamo.update(dbParamsCart, updateCallback)
+    };
+    console.log(dbParamsCart);
+    dynamo.update(dbParamsCart, updateCallback);
   },
 
   /**
@@ -101,41 +115,60 @@ const impl = {
    * @param complete The callback to inform of completion, with optional error parameter.
    */
   cartRemove: (event, complete) => {
-    let priorErr
-    const updateCallback = (err) => {
-      if (priorErr === undefined) { // first update result
+    let priorErr;
+    const updateCallback = err => {
+      if (priorErr === undefined) {
+        // first update result
         if (err) {
-          console.log('err = ', err)
-          priorErr = err
+          console.log('err = ', err);
+          priorErr = err;
         } else {
-          priorErr = false
+          priorErr = false;
         }
-      } else if (priorErr && err) { // second update result, if an error was previously received and we have a new one
-        complete(`${constants.METHOD_CART_REMOVE} - errors updating DynamoDb: ${[priorErr, err]}`)
+      } else if (priorErr && err) {
+        // second update result, if an error was previously received and we have a new one
+        complete(
+          `${constants.METHOD_CART_REMOVE} - errors updating DynamoDb: ${[
+            priorErr,
+            err,
+          ]}`,
+        );
       } else if (priorErr || err) {
-        complete(`${constants.METHOD_CART_REMOVE} - error updating DynamoDb: ${priorErr || err}`)
-      } else { // second update result if error was not previously seen
-        complete()
+        complete(
+          `${
+            constants.METHOD_CART_REMOVE
+          } - error updating DynamoDb: ${priorErr || err}`,
+        );
+      } else {
+        // second update result if error was not previously seen
+        complete();
       }
-    }
+    };
     const dbParamsCart = {
       TableName: constants.TABLE_CART_NAME,
       Key: {
-        userId: event.origin.slice(event.origin.lastIndexOf('.') + 1, event.origin.lastIndexOf('/')), // example userId: FFB43IREIOXFBHWJERAQCI9M5JCJ
+        userId: event.origin.slice(
+          event.origin.lastIndexOf('.') + 1,
+          event.origin.lastIndexOf('/'),
+        ), // example userId: FFB43IREIOXFBHWJERAQCI9M5JCJ
         productId: event.data.id, // example productId: 4579874
       },
-    }
-    console.log(dbParamsCart)
-    dynamo.delete(dbParamsCart, updateCallback)
+    };
+    console.log(dbParamsCart);
+    dynamo.delete(dbParamsCart, updateCallback);
   },
-}
+};
 
-kh.registerSchemaMethodPair(cartAddSchema, impl.cartAdd)
-kh.registerSchemaMethodPair(cartRemoveSchema, impl.cartRemove)
+kh.registerSchemaMethodPair(cartAddSchema, impl.cartAdd);
+kh.registerSchemaMethodPair(cartRemoveSchema, impl.cartRemove);
 
 module.exports = {
   processKinesisEvent: kh.processKinesisEvent.bind(kh),
-}
+};
 
-console.log(`${constants.MODULE} - CONST: ${JSON.stringify(constants, null, 2)}`)
-console.log(`${constants.MODULE} - ENV:   ${JSON.stringify(process.env, null, 2)}`)
+console.log(
+  `${constants.MODULE} - CONST: ${JSON.stringify(constants, null, 2)}`,
+);
+console.log(
+  `${constants.MODULE} - ENV:   ${JSON.stringify(process.env, null, 2)}`,
+);

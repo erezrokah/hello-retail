@@ -1,12 +1,12 @@
-'use strict'
+'use strict';
 
-const aws = require('aws-sdk') // eslint-disable-line import/no-unresolved, import/no-extraneous-dependencies
-const KH = require('kinesis-handler')
+const aws = require('aws-sdk'); // eslint-disable-line import/no-unresolved, import/no-extraneous-dependencies
+const KH = require('kinesis-handler');
 
 // TODO Get these from a better place later
-const eventSchema = require('./retail-stream-schema-ingress.json')
-const productCreateSchema = require('./product-create-schema.json')
-const productImageSchema = require('./product-image-schema.json')
+const eventSchema = require('./retail-stream-schema-ingress.json');
+const productCreateSchema = require('./product-create-schema.json');
+const productImageSchema = require('./product-image-schema.json');
 
 const constants = {
   // self
@@ -17,11 +17,11 @@ const constants = {
   // resources
   TABLE_PRODUCT_CATEGORY_NAME: process.env.TABLE_PRODUCT_CATEGORY_NAME,
   TABLE_PRODUCT_CATALOG_NAME: process.env.TABLE_PRODUCT_CATALOG_NAME,
-}
+};
 
-const kh = new KH.KinesisHandler(eventSchema, constants.MODULE)
+const kh = new KH.KinesisHandler(eventSchema, constants.MODULE);
 
-const dynamo = new aws.DynamoDB.DocumentClient()
+const dynamo = new aws.DynamoDB.DocumentClient();
 
 const impl = {
   /**
@@ -43,23 +43,35 @@ const impl = {
    * @param complete The callback to inform of completion, with optional error parameter.
    */
   putProduct: (event, complete) => {
-    const updated = Date.now()
-    let priorErr
-    const updateCallback = (err) => {
-      if (priorErr === undefined) { // first update result
+    const updated = Date.now();
+    let priorErr;
+    const updateCallback = err => {
+      if (priorErr === undefined) {
+        // first update result
         if (err) {
-          priorErr = err
+          priorErr = err;
         } else {
-          priorErr = false
+          priorErr = false;
         }
-      } else if (priorErr && err) { // second update result, if an error was previously received and we have a new one
-        complete(`${constants.METHOD_PUT_PRODUCT} - errors updating DynamoDb: ${[priorErr, err]}`)
+      } else if (priorErr && err) {
+        // second update result, if an error was previously received and we have a new one
+        complete(
+          `${constants.METHOD_PUT_PRODUCT} - errors updating DynamoDb: ${[
+            priorErr,
+            err,
+          ]}`,
+        );
       } else if (priorErr || err) {
-        complete(`${constants.METHOD_PUT_PRODUCT} - error updating DynamoDb: ${priorErr || err}`)
-      } else { // second update result if error was not previously seen
-        complete()
+        complete(
+          `${
+            constants.METHOD_PUT_PRODUCT
+          } - error updating DynamoDb: ${priorErr || err}`,
+        );
+      } else {
+        // second update result if error was not previously seen
+        complete();
       }
-    }
+    };
     const dbParamsCategory = {
       TableName: constants.TABLE_PRODUCT_CATEGORY_NAME,
       Key: {
@@ -87,8 +99,8 @@ const impl = {
       ReturnValues: 'NONE',
       ReturnConsumedCapacity: 'NONE',
       ReturnItemCollectionMetrics: 'NONE',
-    }
-    dynamo.update(dbParamsCategory, updateCallback)
+    };
+    dynamo.update(dbParamsCategory, updateCallback);
     const dbParamsProduct = {
       TableName: constants.TABLE_PRODUCT_CATALOG_NAME,
       Key: {
@@ -128,8 +140,8 @@ const impl = {
       ReturnValues: 'NONE',
       ReturnConsumedCapacity: 'NONE',
       ReturnItemCollectionMetrics: 'NONE',
-    }
-    dynamo.update(dbParamsProduct, updateCallback)
+    };
+    dynamo.update(dbParamsProduct, updateCallback);
   },
   /**
    * Put the given image in to the dynamo catalog.  Example event:
@@ -147,7 +159,7 @@ const impl = {
    * @param complete The callback to inform of completion, with optional error parameter.
    */
   putImage: (event, complete) => {
-    const updated = Date.now()
+    const updated = Date.now();
     const dbParamsProduct = {
       TableName: constants.TABLE_PRODUCT_CATALOG_NAME,
       Key: {
@@ -178,17 +190,21 @@ const impl = {
       ReturnValues: 'NONE',
       ReturnConsumedCapacity: 'NONE',
       ReturnItemCollectionMetrics: 'NONE',
-    }
-    dynamo.update(dbParamsProduct, complete)
+    };
+    dynamo.update(dbParamsProduct, complete);
   },
-}
+};
 
-kh.registerSchemaMethodPair(productCreateSchema, impl.putProduct)
-kh.registerSchemaMethodPair(productImageSchema, impl.putImage)
+kh.registerSchemaMethodPair(productCreateSchema, impl.putProduct);
+kh.registerSchemaMethodPair(productImageSchema, impl.putImage);
 
 module.exports = {
   processKinesisEvent: kh.processKinesisEvent.bind(kh),
-}
+};
 
-console.log(`${constants.MODULE} - CONST: ${JSON.stringify(constants, null, 2)}`)
-console.log(`${constants.MODULE} - ENV:   ${JSON.stringify(process.env, null, 2)}`)
+console.log(
+  `${constants.MODULE} - CONST: ${JSON.stringify(constants, null, 2)}`,
+);
+console.log(
+  `${constants.MODULE} - ENV:   ${JSON.stringify(process.env, null, 2)}`,
+);
