@@ -1,8 +1,8 @@
 language: node_js
 node_js:
-  - "8.10"
+  - '8.10'
 install: npm run root:install:all
-script: printenv && npm run test && npm run lint
+script: printenv && npm run prettier:ci && npm run test && npm run lint
 #deploy:
 #  - provider: script # TODO
 #    script: npm run root:deploy:all # ci

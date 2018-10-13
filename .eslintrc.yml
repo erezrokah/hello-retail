@@ -6,10 +6,8 @@ rules:
   no-else-return: off
   no-plusplus: off
   no-unexpected-multiline: error
-  semi:
-    - error
-    - never
-  strict: off # doesn't work in node v4
+  arrow-parens: off
+  strict: off
 plugins:
   - react
   - jsx-a11y

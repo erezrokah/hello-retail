@@ -1,3 +1,4 @@
 **/node_modules
 **/*bundle.js
 web/config.js
+**/e2eTests

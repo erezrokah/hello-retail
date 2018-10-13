@@ -11,14 +11,10 @@ module.exports = {
       {
         test: /\.jsx?$/,
         loader: 'babel',
-        query:
-        {
+        query: {
           presets: ['react', 'es2015', 'stage-0'],
         },
-        exclude: [
-          /node_modules/,
-          /\.spec.jsx?$/,
-        ],
+        exclude: [/node_modules/, /\.spec.jsx?$/],
       },
       {
         test: /\.json$/,
@@ -36,4 +32,4 @@ module.exports = {
     port: 7700,
     historyApiFallback: true,
   },
-}
+};

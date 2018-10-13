@@ -1,6 +1,6 @@
-import React, { Component, PropTypes } from 'react'
-import ProductList from './product-list'
-import ProductDataSource from './product-data-source'
+import React, { Component, PropTypes } from 'react';
+import ProductList from './product-list';
+import ProductDataSource from './product-data-source';
 
 // TODO: Further decompose using HOC https://facebook.github.io/react/docs/higher-order-components.html
 
@@ -10,31 +10,38 @@ class ProductCategoryPage extends Component {
     params: PropTypes.shape({
       category: PropTypes.string.isRequired,
     }).isRequired,
-  }
+  };
 
   constructor(props) {
-    super(props)
+    super(props);
     this.state = {
       category: decodeURIComponent(props.params.category),
-    }
-    this.productsLoaded = this.productsLoaded.bind(this)
+    };
+    this.productsLoaded = this.productsLoaded.bind(this);
   }
 
   productsLoaded(products) {
     this.setState({
       productsList: products,
-    })
+    });
   }
 
   render() {
     return (
       <div>
         <h3>{this.state.category}</h3>
-        <ProductList products={this.state.productsList} category={this.state.category} />
-        <ProductDataSource awsLogin={this.props.awsLogin} category={this.state.category} productsLoaded={this.productsLoaded} />
+        <ProductList
+          products={this.state.productsList}
+          category={this.state.category}
+        />
+        <ProductDataSource
+          awsLogin={this.props.awsLogin}
+          category={this.state.category}
+          productsLoaded={this.productsLoaded}
+        />
       </div>
-    )
+    );
   }
 }
 
-export default ProductCategoryPage
+export default ProductCategoryPage;
