@@ -15,14 +15,14 @@ custom:
 
 provider:
   name: aws
-  runtime: nodejs4.3
+  runtime: nodejs8.10
   profile: ${self:custom.private.profile}
   region: ${self:custom.private.region}
 
 functions:
   cart:
     role:
-      Fn::GetAtt: [ CartBuilder, Arn ]
+      Fn::GetAtt: [CartBuilder, Arn]
     handler: cart.processKinesisEvent
     environment:
       TABLE_CART_NAME:
@@ -88,14 +88,14 @@ resources:
                   Action:
                     - 'logs:CreateLogStream'
                   Resource:
-                    Fn::GetAtt: [ CartLogGroup, Arn ]
+                    Fn::GetAtt: [CartLogGroup, Arn]
                 - Effect: Allow
                   Action:
                     - 'logs:PutLogEvents'
                   Resource:
                     Fn::Join:
                       - ':'
-                      - - Fn::GetAtt: [ CartLogGroup, Arn ]
+                      - - Fn::GetAtt: [CartLogGroup, Arn]
                         - '*'
           - PolicyName: ReadFromKinesis
             PolicyDocument:
@@ -113,11 +113,11 @@ resources:
             PolicyDocument:
               Version: '2012-10-17'
               Statement:
-                -  Effect: Allow
-                   Action:
-                     - 'dynamodb:UpdateItem'
-                     - 'dynamodb:DeleteItem'
-                   Resource:
+                - Effect: Allow
+                  Action:
+                    - 'dynamodb:UpdateItem'
+                    - 'dynamodb:DeleteItem'
+                  Resource:
                     Fn::Join:
                       - '/'
                       - - 'arn:aws:dynamodb:${self:provider.region}:${self:custom.private.accountId}:table'
