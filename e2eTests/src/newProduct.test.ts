@@ -13,14 +13,14 @@ describe('sendUserLogin api', () => {
   });
 
   afterEach(async () => {
-    await Promise.all(tables.map(table => clearAllItems(region, table)));
+    // await Promise.all(tables.map(table => clearAllItems(region, table)));
   });
 
   test('should create product and category on product create', async () => {
     const product = {
       brand: 'POLO RALPH LAUREN',
       category: 'Socks for Men',
-      description: 'Best socks evenr',
+      description: 'Best socks ever',
       id: '4579874',
       name: 'Polo Ralph Lauren 3-Pack Socks',
       origin: 'hello-retail/e2e-tests-create-product',
