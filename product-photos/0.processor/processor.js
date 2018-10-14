@@ -107,7 +107,7 @@ const impl = {
         createdBy: event.origin,
         updated,
         updatedBy: event.origin,
-        phone: `+1${event.data.phone}`,
+        phone: event.data.phone,
         lastEvent: event.eventId,
         registrations: constants.ASSIGNMENTS_PER_REGISTRATION,
         assignments: 0,
@@ -116,6 +116,7 @@ const impl = {
           constants.TTL_DELTA_IN_SECONDS,
       },
     };
+    console.log(JSON.stringify(putParams, null, 2));
     dynamo.put(putParams, err => {
       if (err) {
         if (err.code && err.code === 'ConditionalCheckFailedException') {

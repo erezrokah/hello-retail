@@ -66,9 +66,11 @@ class PhotographerRegisterPage extends Component {
   }
 
   phoneNumberChange(event) {
-    // Regardless of formatting valid numbers are 10 digits
-    const phoneNumber = event.target.value.replace(/\D/g, '').substr(0, 10);
-    const isPhoneNumberValid = phoneNumber.match(/^\d{10}$/) !== null;
+    // Regardless of formatting valid numbers are up to 20 digits
+    const phoneNumber = `+${event.target.value
+      .replace(/\D/g, '')
+      .substr(0, 20)}`;
+    const isPhoneNumberValid = phoneNumber.match(/^\+\d{10,20}$/) !== null;
 
     this.setState({
       phoneNumber,
@@ -101,6 +103,8 @@ class PhotographerRegisterPage extends Component {
             <input
               value={this.state.phoneNumber}
               onChange={this.phoneNumberChange}
+              type="tel"
+              placeholder="+15417543010"
             />
             <br />
             <h5>(Additional charges may apply.)</h5>
