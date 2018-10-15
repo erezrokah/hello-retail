@@ -15,12 +15,12 @@ describe('sendUserLogin api', () => {
   });
 
   test('should log event with unsupported data schema on sendUserLogin', async () => {
-    const id = 'someProfileId';
-    const name = 'someProfileName';
+    const id = 'testId';
+    const name = 'testName';
     const bodyObj = {
       id,
       name,
-      origin: `hello-retail/web-client-login-user/${id}/${name}`,
+      origin: `hello-retail/e2e-test-login-user/${id}/${name}`,
       schema: 'com.nordstrom/user-info/login/1-0-0',
     };
     const body = JSON.stringify(bodyObj);
