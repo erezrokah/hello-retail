@@ -9,5 +9,6 @@ export const testsConfig = {
   tables: {
     catalog: 'dev-ProductCatalog-1',
     categories: 'dev-ProductCategory-1',
+    photographers: 'dev-hello-retail-product-photos-data-PhotoRegistrations-1',
   },
 };
