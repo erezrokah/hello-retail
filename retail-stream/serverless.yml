@@ -31,7 +31,7 @@ resources:
       Type: 'AWS::Kinesis::Stream'
       Properties:
         Name: ${self:custom.stage}RetailStream
-        ShardCount: 10
+        ShardCount: 1
 
     # Role for direct producers
     RetailStreamWriter:
@@ -54,13 +54,13 @@ resources:
             PolicyDocument:
               Version: '2012-10-17'
               Statement:
-                -  Effect: Allow
-                   Action:
-                     - 'kinesis:DescribeStream'
-                     - 'kinesis:PutRecord'
-                     - 'kinesis:PutRecords'
-                   Resource:
-                     Fn::GetAtt: [ RetailStream, Arn ]
+                - Effect: Allow
+                  Action:
+                    - 'kinesis:DescribeStream'
+                    - 'kinesis:PutRecord'
+                    - 'kinesis:PutRecords'
+                  Resource:
+                    Fn::GetAtt: [RetailStream, Arn]
     # Role for direct consumers
     RetailStreamReader:
       Type: AWS::IAM::Role
@@ -82,14 +82,14 @@ resources:
             PolicyDocument:
               Version: '2012-10-17'
               Statement:
-                -  Effect: Allow
-                   Action:
-                     - 'kinesis:DescribeStream'
-                     - 'kinesis:GetRecords'
-                     - 'kinesis:GetShardIterator'
-                     - 'kinesis:ListStreams'
-                   Resource:
-                     Fn::GetAtt: [ RetailStream, Arn ]
+                - Effect: Allow
+                  Action:
+                    - 'kinesis:DescribeStream'
+                    - 'kinesis:GetRecords'
+                    - 'kinesis:GetShardIterator'
+                    - 'kinesis:ListStreams'
+                  Resource:
+                    Fn::GetAtt: [RetailStream, Arn]
 
   Outputs:
     RetailStreamName:
@@ -101,18 +101,18 @@ resources:
     RetailStreamArn:
       Description: The ARN for the Retail Stream
       Value:
-        Fn::GetAtt: [ RetailStream, Arn ]
+        Fn::GetAtt: [RetailStream, Arn]
       Export:
         Name: ${self:custom.retailStream.custom.exportRetailStreamArn}
     RetailStreamWriterArn:
       Description: The ARN for the defined Role that can write events to the RetailStream
       Value:
-        Fn::GetAtt: [ RetailStreamWriter, Arn ]
+        Fn::GetAtt: [RetailStreamWriter, Arn]
       Export:
         Name: ${self:custom.retailStream.custom.exportRetailStreamWriterArn}
     RetailStreamReaderArn:
       Description: The ARN for the defined Role that can read events from the RetailStream
       Value:
-        Fn::GetAtt: [ RetailStreamReader, Arn ]
+        Fn::GetAtt: [RetailStreamReader, Arn]
       Export:
         Name: ${self:custom.retailStream.custom.exportRetailStreamReaderArn}

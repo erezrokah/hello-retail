@@ -59,7 +59,7 @@ States:
           AwaitPhoto:
             Type: Task
             Resource: ${self:custom.productPhotos.receiveActivityArn}
-            TimeoutSeconds: 600
+            TimeoutSeconds: 120
             Catch:
               - ErrorEquals:
                   - States.Timeout
