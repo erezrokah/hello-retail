@@ -48,7 +48,6 @@ describe('newProduct api', () => {
     expect(actualBody.ShardId).toStartWith('shardId');
     expect(actualBody.SequenceNumber).toMatch(/\d{10,}/);
 
-    // assert processor lambda was executed by checking its log
     expect.assertions(7);
     await expect({
       pollEvery: 5000,
