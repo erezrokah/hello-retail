@@ -29,7 +29,7 @@ describe('registerPhotographer api', () => {
     await clearAllItems(region, photographers);
   });
 
-  test('should log event with unsupported data schema on registerPhotographer', async () => {
+  test('should create photographer entry on registerPhotographer', async () => {
     const id = 'testId';
     const name = 'testName';
     const origin = `hello-retail/e2e-test-update-phone/${id}/${name}`;
