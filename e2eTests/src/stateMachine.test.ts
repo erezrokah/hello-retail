@@ -128,7 +128,7 @@ describe('stateMachine', () => {
     // storage bucket should have the photo from the mms message
     const expectedBuffer = await (await fetch(mediaUrl)).buffer();
     expect({ pollEvery, region, bucket: photos, timeout }).toHaveObject(
-      `i/p/${product.id}`,
+      `${imagesPath}${product.id}`,
       expectedBuffer,
     );
   });
