@@ -31,7 +31,7 @@ States:
         Next: SendAssignmentNotice
   WaitAssignment:
     Type: Wait
-    Seconds: 600
+    Seconds: 15
     Next: AssignPhotographer
   SendAssignmentNotice:
     Type: Task

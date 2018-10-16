@@ -2,6 +2,7 @@ import { clearAllItems } from 'jest-e2e-serverless/lib/utils/dynamoDb';
 import { invoke } from 'jest-e2e-serverless/lib/utils/lambda';
 import { stopRunningExecutions } from 'jest-e2e-serverless/lib/utils/stepFunctions';
 import { testsConfig } from './config';
+import { getNewProduct } from './utils';
 
 const { region } = testsConfig;
 const { eventWriter } = testsConfig.lambdas;
@@ -21,19 +22,7 @@ describe('newProduct api', () => {
   });
 
   test('should create product and category on product create', async () => {
-    // this is how the Web app generates the id
-    const id = `0000000${Math.floor(
-      Math.abs(Math.random() * 10000000),
-    )}`.substr(-7);
-    const product = {
-      brand: 'POLO RALPH LAUREN',
-      category: 'Socks for Men',
-      description: 'Best socks ever',
-      id,
-      name: 'Polo Ralph Lauren 3-Pack Socks',
-      origin: 'hello-retail/e2e-tests-create-product/System Test',
-      schema: 'com.nordstrom/product/create/1-0-0',
-    };
+    const product = getNewProduct();
     const body = JSON.stringify(product);
     const payload = { body };
     const result = await invoke(region, eventWriter, payload);

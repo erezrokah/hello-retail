@@ -38,7 +38,7 @@ class ProductDetailPage extends Component {
       brand: p.brand,
       description: p.description,
       id: p.id,
-      image: p.image ? `https://${p.image}` : null,
+      image: p.image ? `https://s3.amazonaws.com/${p.image}` : null,
     });
   }
 
