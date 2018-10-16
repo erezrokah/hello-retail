@@ -17,7 +17,7 @@ provider:
 functions:
   receive:
     role:
-      Fn::GetAtt: [ ReceiveRole, Arn ]
+      Fn::GetAtt: [ReceiveRole, Arn]
     handler: receive.handler
     environment:
       IMAGE_BUCKET: ${self:custom.productPhotos.bucket}
@@ -26,7 +26,7 @@ functions:
           - ''
           - - https://
             - Ref: ApiGatewayRestApi
-            - .execute-api.us-west-2.amazonaws.com/${self:custom.stage}/sms
+            - .execute-api.${self:custom.private.region}.amazonaws.com/${self:custom.stage}/sms
       TABLE_PHOTO_ASSIGNMENTS_NAME:
         Fn::ImportValue: ${self:custom.productPhotos.exportPhotoAssignmentsTableName}
       TWILIO_AUTH_TOKEN: ${self:custom.private.twilio.authToken}
@@ -68,14 +68,14 @@ resources:
                   Action:
                     - 'logs:CreateLogStream'
                   Resource:
-                    Fn::GetAtt: [ ReceiveLogGroup, Arn ]
+                    Fn::GetAtt: [ReceiveLogGroup, Arn]
                 - Effect: Allow
                   Action:
                     - 'logs:PutLogEvents'
                   Resource:
                     Fn::Join:
                       - ':'
-                      - - Fn::GetAtt: [ ReceiveLogGroup, Arn ]
+                      - - Fn::GetAtt: [ReceiveLogGroup, Arn]
                         - '*'
           - ${self:custom.productPhotos.getPhotoAssignment}
           - PolicyName: StoreImageInBucket
@@ -104,6 +104,6 @@ resources:
     ReceiveLambdaArn:
       Description: The Name of the Photo Assignments Receive Lambda
       Value:
-        'Fn::GetAtt': [ ReceiveLambdaFunction, Arn ]
+        'Fn::GetAtt': [ReceiveLambdaFunction, Arn]
       Export:
         Name: ${self:custom.productPhotos.exportPhotoAssignmentsReceiveLambdaArn}

@@ -30,7 +30,6 @@ ajv.addSchema(photoAssignmentSchema, photoAssignmentSchemaId);
  */
 aws.config.setPromisesDependency(BbPromise);
 const dynamo = new aws.DynamoDB.DocumentClient();
-const kms = new aws.KMS();
 const s3 = new aws.S3();
 const stepfunctions = new aws.StepFunctions();
 
@@ -50,15 +49,10 @@ const constants = {
   ERROR_UNAUTHORIZED: 'Unauthorized',
   ERROR_USER: 'UserError',
   ERROR_SERVER: 'ServerError',
-  ERROR_DATA_CORRUPTION: 'DATA CORRUPTION',
-  ERROR_SECURITY_RISK: '!!!SECURITY RISK!!!',
-  HASHES:
-    '##########################################################################################',
 
   // Locations
   MODULE: 'receive.js',
   METHOD_HANDLER: 'handler',
-  METHOD_DECRYPT: 'util.decrypt',
   METHOD_VALIDATE_TWILIO_REQUEST: 'impl.validateTwilioRequest',
   METHOD_GET_IMAGE_FROM_TWILIO: 'impl.getImageFromTwilio',
   METHOD_PLACE_IMAGE_IN_S3: 'impl.storeImage',
@@ -111,33 +105,6 @@ const util = {
     },
     body,
   }),
-  securityRisk: (schemaId, ajvErrors, items) => {
-    console.log(constants.HASHES);
-    console.log(constants.ERROR_SECURITY_RISK);
-    console.log(
-      `${constants.METHOD_TODO} ${
-        constants.ERROR_DATA_CORRUPTION
-      } could not validate data to '${schemaId}' schema. Errors: ${ajvErrors}`,
-    );
-    console.log(
-      `${constants.METHOD_TODO} ${
-        constants.ERROR_DATA_CORRUPTION
-      } bad data: ${JSON.stringify(items)}`,
-    );
-    console.log(constants.HASHES);
-    return util.response(500, constants.ERROR_SERVER);
-  },
-  decrypt: (field, value) =>
-    kms
-      .decrypt({ CiphertextBlob: new Buffer(value, 'base64') })
-      .promise()
-      .then(
-        data => BbPromise.resolve(data.Plaintext.toString('ascii')),
-        err =>
-          BbPromise.reject(
-            new ServerError(`Error decrypting '${field}': ${err}`),
-          ), // eslint-disable-line comma-dangle
-      ),
 };
 
 /**
@@ -197,7 +164,7 @@ const impl = {
           'Oops!  We were expecting a product image.  Please send one!  :D',
         ),
       );
-    } else if (body.NumMedia < 1) {
+    } else if (body.NumMedia > 1) {
       return BbPromise.reject(
         new UserError(
           'Oops!  We can only handle one image.  Sorry... can you please try again?  :D',
@@ -346,12 +313,12 @@ const impl = {
       );
   },
   userErrorResp: error => {
-    const msg = new Twilio.TwimlResponse();
+    const msg = new Twilio.twiml.MessagingResponse();
     msg.message(error.message);
     return msg.toString();
   },
   thankYouForImage: taskEvent => {
-    const msg = new Twilio.TwimlResponse();
+    const msg = new Twilio.twiml.MessagingResponse();
     msg.message(`Thanks so much ${taskEvent.photographer.name}!`);
     return msg.toString();
   },

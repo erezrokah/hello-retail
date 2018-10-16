@@ -1,4 +1,8 @@
 export const testsConfig = {
+  buckets: {
+    photos: 'dev.hello-retail.biz',
+  },
+  imagesPath: 'i/p/',
   lambdas: {
     eventWriter: 'hello-retail-event-writer-api-dev-eventWriter',
     processor: 'hello-retail-product-photos-processor-dev-processor',
@@ -9,6 +13,7 @@ export const testsConfig = {
   tables: {
     catalog: 'dev-ProductCatalog-1',
     categories: 'dev-ProductCategory-1',
+    photoAssignments: 'dev-hello-retail-product-photos-data-PhotoAssignments-1',
     photographers: 'dev-hello-retail-product-photos-data-PhotoRegistrations-1',
   },
 };
