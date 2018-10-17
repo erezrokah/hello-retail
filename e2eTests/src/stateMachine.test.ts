@@ -40,6 +40,13 @@ describe('stateMachine', () => {
   const pollEvery = 2500;
   const timeout = 30 * 1000;
 
+  // this test simulates the following flow:
+  // 1. Merchant creates a new product
+  // 2. A photographer registers to the system using a phone number
+  // 3. The photographer is assigned with taking a photo for the product
+  // 4. The photographer receives an sms message to take a photo of the product
+  // 5. The photographer responds with an mms message containing the product's photo
+  // 6. The photo is saved in s3 and the photo assignment is marked as complete
   test('should assign product on new photographer and save photo on mms response', async () => {
     const product = getNewProduct();
     let payload = { body: JSON.stringify(product) };
